@@ -2,11 +2,11 @@
 
 set -e -o pipefail
 
-if [ "$#" -ne 1 ]; then
+MANIFEST_ID="${1:-$MANIFEST_ID}"
+if [ -z "$MANIFEST_ID" ]; then
     echo "Usage: $0 <manifest_id>"
     exit 1
 fi
-MANIFEST_ID=$1
 
 # Load environment variables from .env file
 # shellcheck disable=SC2046

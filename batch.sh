@@ -9,7 +9,7 @@ fi
 
 while IFS= read -r line; do
     # create github action body using jq
-    data=$(jq -n -c --arg manifestId "$line" '{ref: "master", inputs: {depotId: "2347771", manifestId: $manifestId, gitBranch: "test2"}}')
+    data=$(jq -n -c --arg manifestId "$line" '{ref: "master", inputs: {depotId: "2347771", manifestId: $manifestId, gitBranch: "windows"}}')
 
     echo "Triggering github action for manifest $line"
 

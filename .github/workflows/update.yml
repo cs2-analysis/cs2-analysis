@@ -30,7 +30,7 @@ env:
 
   METADATA_GIT_URL: https://github.com/cs2-analysis/test-data.git
   GIT_NAME: cs2-anal
-  GIT_EMAIL: cs2@nezu.cc
+  GIT_EMAIL: 187910277+cs2-anal@users.noreply.github.com
   GIT_BRANCH: ${{ github.event.inputs.gitBranch }}
 
 jobs:

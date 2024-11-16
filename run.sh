@@ -113,7 +113,7 @@ while read -r -d $'\0' file; do
 done < <(find "depots/$MANIFEST_ID" -type f -not -path '*/.*' -print0)
 
 echo "Uploading files to S3"
-"$RCLONE" copy "staging" "cs2-dex:$S3_BUCKET_NAME/$DEPOT_ID/" --progress
+"$RCLONE" copy "staging" "cs2-dex:$S3_BUCKET_NAME/$DEPOT_ID/" -v
 
 echo "Downloading manifest"
 mkdir -p -v "manifests"
@@ -121,7 +121,7 @@ manifest_path="manifests/$MANIFEST_ID.json"
 "$MANIFEST_GRABBER" "$APP_ID" "$DEPOT_ID" "$MANIFEST_ID" > "$manifest_path"
 
 echo "Uploading manifest to S3"
-"$RCLONE" copy "$manifest_path" "cs2-dex:$S3_BUCKET_NAME/manfiests/$DEPOT_ID/" --progress
+"$RCLONE" copy "$manifest_path" "cs2-dex:$S3_BUCKET_NAME/manfiests/$DEPOT_ID/" -v
 
 echo "Cloning metadata repository"
 rm -rf "metadata"

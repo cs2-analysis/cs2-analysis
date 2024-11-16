@@ -53,6 +53,11 @@ jobs:
         run: |
           git config --unset-all http.https://github.com/.extraheader
           git config --global credential.https://github.com/.helper "! f() { echo username=token; echo password=${{ secrets.GIT_TOKEN }}; };f"
+
+      - name: Enable bbr
+        run: |
+          sudo sysctl -w net.ipv4.tcp_congestion_control=bbr
+          sudo sysctl -w net.core.default_qdisc=fq
           
       - name: Run downloader
         run: ./run.sh

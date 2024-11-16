@@ -18,6 +18,10 @@ on:
 
 run-name: Download depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }}
 
+concurrency:
+  group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.gitBranch }}
+  cancel-in-progress: false
+
 env:
   S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
   S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}

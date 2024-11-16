@@ -22,5 +22,5 @@ while IFS= read -r line; do
         -d "$data"
     
     echo "$line" >> triggered.txt
-    sleep 120
+    sleep 60
 done < manifests.txt

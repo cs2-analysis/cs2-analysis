@@ -1,6 +1,2 @@
 .env
-depots/
-staging/
-manifests/
-metadata/
 *.txt

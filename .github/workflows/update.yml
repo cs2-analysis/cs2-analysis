@@ -64,4 +64,4 @@ jobs:
           sudo sysctl -w net.core.default_qdisc=fq
           
       - name: Run downloader
-        run: ./run.sh
+        run: ./update/run.sh

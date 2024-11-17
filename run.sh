@@ -126,7 +126,7 @@ echo "Uploading manifest to S3"
 echo "Cloning metadata repository"
 rm -rf "metadata"
 git clone "$METADATA_GIT_URL" "metadata"
-git -C "metadata" checkout "$GIT_BRANCH" || git -C "metadata" checkout --orphan "$GIT_BRANCH"
+git -C "metadata" checkout "$GIT_BRANCH" || (git -C "metadata" checkout --orphan "$GIT_BRANCH" && git clean -d -f)
 git -C "metadata" config --local user.email "$GIT_EMAIL"
 git -C "metadata" config --local user.name "$GIT_NAME"
 mkdir -p -v "metadata/data"

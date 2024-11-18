@@ -1,0 +1,14 @@
+{
+  "python.analysis.extraPaths": [
+    "/opt/ida-pro/python/",
+    "/opt/ida-pro/python/lib-dynload"
+  ],
+  "python.autoComplete.extraPaths": [
+    "/opt/ida-pro/python/",
+    "/opt/ida-pro/python/lib-dynload"
+  ],
+  "cSpell.words": [
+    "idaapi",
+    "idapro"
+  ],
+}

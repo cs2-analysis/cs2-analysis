@@ -18,7 +18,7 @@ while IFS= read -r line; do
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
-        https://api.github.com/repos/cs2-analysis/cs2-dex/actions/workflows/update.yml/dispatches \
+        https://api.github.com/repos/cs2-analysis/cs2-analysis/actions/workflows/update.yml/dispatches \
         -d "$data"
     
     echo "$line" >> triggered.txt

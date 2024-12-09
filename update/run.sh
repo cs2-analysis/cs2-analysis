@@ -63,6 +63,16 @@ if [ -z "$GIT_NAME" ]; then
     exit 1
 fi
 
+if [ -z "$STEAM_USERNAME" ]; then
+    echo "STEAM_USERNAME is not set"
+    exit 1
+fi
+
+if [ -z "$STEAM_PASSWORD" ]; then
+    echo "STEAM_PASSWORD is not set"
+    exit 1
+fi
+
 DEPOTDOWNLOADER=$(which DepotDownloader 2> /dev/null || which depotdownloader 2> /dev/null)
 if [ -z "$DEPOTDOWNLOADER" ]; then
     echo "DepotDownloader not found in PATH"
@@ -96,6 +106,7 @@ echo "configuring rclone"
 
 echo "downloading depot"
 "$DEPOTDOWNLOADER" -dir "depots/$MANIFEST_ID" \
+    -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" \
     -app "$APP_ID" -depot "$DEPOT_ID" -manifest "$MANIFEST_ID" \
     -filelist <(echo 'regex:^.+\.(dll|exe|so)$')
 
@@ -118,7 +129,8 @@ echo "Uploading files to S3"
 echo "Downloading manifest"
 mkdir -p -v "manifests"
 manifest_path="manifests/$MANIFEST_ID.json"
-"$MANIFEST_GRABBER" "$APP_ID" "$DEPOT_ID" "$MANIFEST_ID" > "$manifest_path"
+"$MANIFEST_GRABBER" -u "$STEAM_USERNAME" -p "$STEAM_PASSWORD" \
+    "$APP_ID" "$DEPOT_ID" "$MANIFEST_ID" > "$manifest_path"
 
 echo "Uploading manifest to S3"
 "$RCLONE" copy "$manifest_path" "cs2:$S3_BUCKET_NAME/manfiests/$DEPOT_ID/" -v

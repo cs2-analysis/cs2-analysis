@@ -37,6 +37,9 @@ env:
   GIT_EMAIL: 187910277+cs2-anal@users.noreply.github.com
   GIT_BRANCH: ${{ github.event.inputs.gitBranch }}
 
+  STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+  STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+
 jobs:
   process:
     runs-on: ubuntu-latest

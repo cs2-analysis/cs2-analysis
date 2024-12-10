@@ -23,86 +23,10 @@ if [ -z "$DEPOT_ID" ]; then
     exit 1
 fi
 
-if [ -z "$S3_ACCESS_KEY" ]; then
-    echo "S3_ACCESS_KEY is not set"
-    exit 1
-fi
-
-if [ -z "$S3_SECRET_KEY" ]; then
-    echo "S3_SECRET_KEY is not set"
-    exit 1
-fi
-
-if [ -z "$S3_ENDPOINT" ]; then
-    echo "S3_ENDPOINT is not set"
-    exit 1
-fi
-
-if [ -z "$S3_BUCKET_NAME" ]; then
-    echo "S3_BUCKET_NAME is not set"
-    exit 1
-fi
-
-if [ -z "$METADATA_GIT_URL" ]; then
-    echo "METADATA_GIT_URL is not set"
-    exit 1
-fi
-
-if [ -z "$GIT_BRANCH" ]; then
-    echo "GIT_BRANCH is not set"
-    exit 1
-fi
-
-if [ -z "$GIT_EMAIL" ]; then
-    echo "GIT_EMAIL is not set"
-    exit 1
-fi
-
-if [ -z "$GIT_NAME" ]; then
-    echo "GIT_NAME is not set"
-    exit 1
-fi
-
-if [ -z "$STEAM_USERNAME" ]; then
-    echo "STEAM_USERNAME is not set"
-    exit 1
-fi
-
-if [ -z "$STEAM_PASSWORD" ]; then
-    echo "STEAM_PASSWORD is not set"
-    exit 1
-fi
-
-DEPOTDOWNLOADER=$(which DepotDownloader 2> /dev/null || which depotdownloader 2> /dev/null)
-if [ -z "$DEPOTDOWNLOADER" ]; then
-    echo "DepotDownloader not found in PATH"
-    exit 1
-fi
-
-echo "DepotDownloader executable: $DEPOTDOWNLOADER"
-
-RCLONE=$(which rclone 2> /dev/null)
-if [ -z "$RCLONE" ]; then
-    echo "rclone not found in PATH"
-    exit 1
-fi
-
-echo "rclone executable: $RCLONE"
-
-MANIFEST_GRABBER=$(which manifest-grabber 2> /dev/null)
-if [ -z "$MANIFEST_GRABBER" ]; then
-    echo "manifest-grabber not found in PATH"
-    exit 1
-fi
-
-echo "manifest-grabber executable: $MANIFEST_GRABBER"
-
-echo "configuring rclone"
-"$RCLONE" config create --non-interactive cs2 s3 \
-    "provider=Minio" \
-    "access_key_id=$S3_ACCESS_KEY" \
-    "secret_access_key=$S3_SECRET_KEY" \
-    "endpoint=$S3_ENDPOINT" > /dev/null
+source ../common/git.sh
+source ../common/depotdownloader.sh
+source ../common/manifest-grabber.sh
+source ../common/rclone.sh
 
 echo "downloading depot"
 "$DEPOTDOWNLOADER" -dir "depots/$MANIFEST_ID" \

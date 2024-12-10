@@ -1,1 +1,4 @@
 bin/
+metadata/
+staging/
+.env

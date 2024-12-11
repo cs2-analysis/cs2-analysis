@@ -49,9 +49,8 @@ jobs:
 
       - name: Prepare file list
         id: prepare
-        run: |
-          cs analysis
-          ./prepare.sh
+        working-directory: analysis
+        run: ./prepare.sh
   
   analyze:
     runs-on: ubuntu-latest
@@ -78,7 +77,6 @@ jobs:
         uses: cs2-analysis/setup-bindiff@v1
       
       - name: Run analysis
-        run: |
-          cs analysis
-          ./analyze.sh ${{ matrix.file }}
+        working-directory: analysis
+        run: ./analyze.sh ${{ matrix.file }}
       

@@ -25,7 +25,7 @@ if [ ! -f "staging/$FILE_PATH" ]; then
     exit 1
 fi
 
-./analyze.py "staging/$FILE_PATH"
+script -q -e -f -c "./analyze.py \"staging/$FILE_PATH\"" /dev/null
 
 # compress all .BinExport files
 find "staging" -type f -name "*.BinExport" -exec gzip -9 -v "{}" \; -exec mv -v "{}.gz" "{}" \;

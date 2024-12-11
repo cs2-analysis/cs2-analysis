@@ -56,6 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
+      fail-fast: false
       matrix:
         file: ${{ fromJSON(needs.prepare.outputs.files) }}
     name: Analyze ${{ matrix.file }}

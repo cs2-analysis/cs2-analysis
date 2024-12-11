@@ -18,7 +18,7 @@ on:
 run-name: Download depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }} on branch ${{ github.event.inputs.gitBranch }}
 
 concurrency:
-  group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.gitBranch }}
+  group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.manifestId }}-${{ github.event.inputs.gitBranch }}
   cancel-in-progress: false
 
 env:
@@ -27,7 +27,6 @@ env:
   S3_BUCKET_NAME: ${{ vars.S3_BUCKET_NAME }}
   S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
 
-  APP_ID: 730
   DEPOT_ID: ${{ github.event.inputs.depotId }}
   MANIFEST_ID: ${{ github.event.inputs.manifestId }}
 
@@ -40,30 +39,46 @@ env:
   STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
 
 jobs:
-  process:
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.prepare.outputs.files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Steam Depot Downloader
-        uses: cs2-analysis/setup-steam-depot-downloader@v1
-
-      - name: Install manifest-grabber
-        run: npm install -g https://github.com/cs2-analysis/manifest-grabber
-
+      - name: Prepare file list
+        id: prepare
+        run: |
+          cs analysis
+          ./prepare.sh
+  
+  analyze:
+    runs-on: ubuntu-latest
+    needs: prepare
+    strategy:
+      matrix:
+        file: ${{ fromJSON(needs.prepare.outputs.files) }}
+    name: Analyze ${{ matrix.file }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
       - name: Install rclone
         run: curl https://rclone.org/install.sh | sudo bash
       
-      - name: Setup git auth
-        run: |
-          git config --unset-all http.https://github.com/.extraheader
-          git config --global credential.https://github.com/.helper "! f() { echo username=token; echo password=${{ secrets.GIT_TOKEN }}; };f"
+      - name: Setup IDA Pro
+        uses: cs2-analysis/setup-ida-pro@v1
+        with:
+          download-link: ${{ secrets.IDA_DOWNLOAD_LINK_LINUX }}
+          overlay-links: ${{ secrets.IDA_OVERLAY_LINKS_LINUX }}
+          install-command: ${{ secrets.IDA_INSTALL_COMMAND_LINUX }}
 
-      - name: Enable bbr
+      - name: Setup BinDiff
+        uses: cs2-analysis/setup-bindiff@v1
+      
+      - name: Run analysis
         run: |
-          sudo sysctl -w net.ipv4.tcp_congestion_control=bbr
-          sudo sysctl -w net.core.default_qdisc=fq
-          
-      - name: Run downloader
-        run: ./update/run.sh
+          cs analysis
+          ./analyze.sh ${{ matrix.file }}
+      

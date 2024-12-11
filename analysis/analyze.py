@@ -21,7 +21,7 @@ def main():
     ida_expr.eval_idc_expr(None, ida_idaapi.BADADDR, f'BinExportBinary("{binexportPath}")')
 
     print("Closing database")
-    ida_ida.inf_set_compress_idb(False)
+    ida_ida.inf_set_compress_idb(True)
     idapro.close_database()
 
 if __name__ == "__main__":

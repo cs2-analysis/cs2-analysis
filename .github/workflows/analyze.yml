@@ -1,4 +1,4 @@
-name: Download depot
+name: Analyze depot
 on:
   workflow_dispatch:
     inputs:
@@ -15,7 +15,7 @@ on:
         required: true
         type: string
 
-run-name: Download depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }} on branch ${{ github.event.inputs.gitBranch }}
+run-name: Analyze depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }} on branch ${{ github.event.inputs.gitBranch }}
 
 concurrency:
   group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.manifestId }}-${{ github.event.inputs.gitBranch }}

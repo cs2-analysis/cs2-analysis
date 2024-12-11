@@ -30,9 +30,6 @@ script -q -e -f -c "./analyze.py \"staging/$FILE_PATH\"" /dev/null
 # compress all .BinExport files
 find "staging" -type f -name "*.BinExport" -exec gzip -9 -v "{}" \; -exec mv -v "{}.gz" "{}" \;
 
-# FIXME: remove this
-S3_BUCKET_NAME="test"
-
 "$RCLONE" copy "staging" "cs2:$S3_BUCKET_NAME" -v --include "*.i64" --ignore-size
 
 # why can't we just --metadata-set without --metadata? come on rclone...

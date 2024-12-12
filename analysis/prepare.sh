@@ -25,9 +25,10 @@ git clone "$METADATA_GIT_URL" "metadata" || true
 git -C metadata checkout "$GIT_BRANCH"
 
 GIT_COMMIT=$(git -C metadata log --pretty=format:"%H" --no-patch --grep="^$MANIFEST_ID$" | head -n 1)
-echo "Checking out commit $GIT_COMMIT"
 
+echo "Checking out commit $GIT_COMMIT"
 file_list=$(git -C metadata diff-tree --no-commit-id --name-only -r --root "$GIT_COMMIT")
+git -c advice.detachedHead=false -C metadata checkout "$GIT_COMMIT"
 
 paths=""
 while read -r -d $'\n' file; do

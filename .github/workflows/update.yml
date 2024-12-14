@@ -82,3 +82,4 @@ jobs:
       depotId: ${{ inputs.depotId }}
       manifestId: ${{ inputs.manifestId }}
       gitBranch: ${{ inputs.gitBranch }}
+    secrets: inherit

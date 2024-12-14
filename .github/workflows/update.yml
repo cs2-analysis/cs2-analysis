@@ -72,7 +72,7 @@ jobs:
           
       - name: Run downloader
         working-directory: update
-        run: ./update/run.sh
+        run: ./run.sh
 
       - name: Wait a bit
         if: ${{ !inputs.noAnalyze }}

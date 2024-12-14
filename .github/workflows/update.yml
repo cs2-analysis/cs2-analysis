@@ -71,6 +71,7 @@ jobs:
           sudo sysctl -w net.core.default_qdisc=fq
           
       - name: Run downloader
+        working-directory: update
         run: ./update/run.sh
 
       - name: Wait a bit

@@ -22,10 +22,6 @@ on:
 
 run-name: Download depot 730 ${{ inputs.depotId }} ${{ inputs.manifestId }} on branch ${{ inputs.gitBranch }}
 
-concurrency:
-  group: ${{ inputs.depotId }}-${{ inputs.gitBranch }}
-  cancel-in-progress: false
-
 env:
   S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
   S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
@@ -45,8 +41,12 @@ env:
   STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
 
 jobs:
-  process:
+  update:
     runs-on: ubuntu-latest
+    name: Download depot
+    concurrency:
+      group: ${{ inputs.depotId }}-${{ inputs.gitBranch }}
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,14 +74,11 @@ jobs:
         working-directory: update
         run: ./run.sh
 
-      - name: Wait a bit
-        if: ${{ !inputs.noAnalyze }}
-        run: sleep 5
-
-      - name: Analyze
-        if: ${{ !inputs.noAnalyze }}
-        uses: ./.github/workflows/analyze.yml
-        with:
-          depotId: ${{ inputs.depotId }}
-          manifestId: ${{ inputs.manifestId }}
-          gitBranch: ${{ inputs.gitBranch }}
+  analyze:
+    uses: ./.github/workflows/analyze.yml
+    if: ${{ !inputs.noAnalyze }}
+    needs: update
+    with:
+      depotId: ${{ inputs.depotId }}
+      manifestId: ${{ inputs.manifestId }}
+      gitBranch: ${{ inputs.gitBranch }}

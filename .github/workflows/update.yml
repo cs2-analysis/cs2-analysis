@@ -80,7 +80,7 @@ jobs:
 
       - name: Analyze
         if: ${{ !inputs.noAnalyze }}
-        uses: ./.github/workflows/analyze.yml@master
+        uses: ./.github/workflows/analyze.yml
         with:
           depotId: ${{ inputs.depotId }}
           manifestId: ${{ inputs.manifestId }}

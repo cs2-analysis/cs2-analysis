@@ -32,7 +32,7 @@ env:
   DEPOT_ID: ${{ inputs.depotId }}
   MANIFEST_ID: ${{ inputs.manifestId }}
 
-  METADATA_GIT_URL: https://github.com/cs2-analysis/deports.git
+  METADATA_GIT_URL: https://github.com/cs2-analysis/depots.git
   GIT_NAME: cs2-anal
   GIT_EMAIL: 187910277+cs2-anal@users.noreply.github.com
   GIT_BRANCH: ${{ inputs.gitBranch }}

@@ -14,11 +14,25 @@ on:
         description: 'Git branch'
         required: true
         type: string
+  workflow_call:
+    inputs:
+      depotId:
+        description: 'Depot ID'
+        required: true
+        type: string
+      manifestId:
+        description: 'Manifest ID'
+        required: true
+        type: string
+      gitBranch:
+        description: 'Git branch'
+        required: true
+        type: string
 
-run-name: Analyze depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }} on branch ${{ github.event.inputs.gitBranch }}
+run-name: Analyze depot 730 ${{ inputs.depotId }} ${{ inputs.manifestId }} on branch ${{ inputs.gitBranch }}
 
 concurrency:
-  group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.manifestId }}-${{ github.event.inputs.gitBranch }}
+  group: ${{ inputs.depotId }}-${{ inputs.manifestId }}-${{ inputs.gitBranch }}
   cancel-in-progress: false
 
 env:
@@ -27,13 +41,13 @@ env:
   S3_BUCKET_NAME: ${{ vars.S3_BUCKET_NAME }}
   S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
 
-  DEPOT_ID: ${{ github.event.inputs.depotId }}
-  MANIFEST_ID: ${{ github.event.inputs.manifestId }}
+  DEPOT_ID: ${{ inputs.depotId }}
+  MANIFEST_ID: ${{ inputs.manifestId }}
 
   METADATA_GIT_URL: https://github.com/cs2-analysis/deports.git
   GIT_NAME: cs2-anal
   GIT_EMAIL: 187910277+cs2-anal@users.noreply.github.com
-  GIT_BRANCH: ${{ github.event.inputs.gitBranch }}
+  GIT_BRANCH: ${{ inputs.gitBranch }}
 
   STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
   STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}

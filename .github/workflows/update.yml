@@ -14,11 +14,16 @@ on:
         description: 'Git branch'
         required: true
         type: string
+      noAnalyze:
+        description: 'Do not analyze'
+        required: false
+        type: boolean
+        default: false
 
-run-name: Download depot 730 ${{ github.event.inputs.depotId }} ${{ github.event.inputs.manifestId }} on branch ${{ github.event.inputs.gitBranch }}
+run-name: Download depot 730 ${{ inputs.depotId }} ${{ inputs.manifestId }} on branch ${{ inputs.gitBranch }}
 
 concurrency:
-  group: ${{ github.event.inputs.depotId }}-${{ github.event.inputs.gitBranch }}
+  group: ${{ inputs.depotId }}-${{ inputs.gitBranch }}
   cancel-in-progress: false
 
 env:
@@ -28,13 +33,13 @@ env:
   S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
 
   APP_ID: 730
-  DEPOT_ID: ${{ github.event.inputs.depotId }}
-  MANIFEST_ID: ${{ github.event.inputs.manifestId }}
+  DEPOT_ID: ${{ inputs.depotId }}
+  MANIFEST_ID: ${{ inputs.manifestId }}
 
   METADATA_GIT_URL: https://github.com/cs2-analysis/deports.git
   GIT_NAME: cs2-anal
   GIT_EMAIL: 187910277+cs2-anal@users.noreply.github.com
-  GIT_BRANCH: ${{ github.event.inputs.gitBranch }}
+  GIT_BRANCH: ${{ inputs.gitBranch }}
 
   STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
   STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
@@ -67,3 +72,15 @@ jobs:
           
       - name: Run downloader
         run: ./update/run.sh
+
+      - name: Wait a bit
+        if: ${{ !inputs.noAnalyze }}
+        run: sleep 5
+
+      - name: Analyze
+        if: ${{ !inputs.noAnalyze }}
+        uses: ./.github/workflows/analyze.yml@master
+        with:
+          depotId: ${{ inputs.depotId }}
+          manifestId: ${{ inputs.manifestId }}
+          gitBranch: ${{ inputs.gitBranch }}
